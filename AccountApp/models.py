@@ -18,15 +18,33 @@ class User (AbstractUser):
     pass
 
 class Doctor(User):
-    license_number=models.CharField(max_length=6,unique=True,blank=False,validators=[MinLengthValidator(6)],min_length=6)
+    license_number=models.CharField(max_length=6,unique=True,blank=False,validators=[MinLengthValidator(6)])
     phone=models.CharField(max_length=8,unique=True,validators=[number_validator])
     specialties=models.ManyToManyField('AccountApp.Specialty',related_name="Doctors")
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    class Meta():
+        verbose_name="Doctor"
+        verbose_name_plural="Doctors"
+    def __str__(self):
+        return f"DR. {self.first_name} {self.last_name}"
 
 class Patient(User):
     national_id=models.CharField(max_length=8,unique=True)
     phone=models.CharField(max_length=8,unique=True)
     birth_date=models.DateField(validators=[birth_date_validator])
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    class Meta():
+        verbose_name="Patient"
+        verbose_name_plural="Patients"
 
 class Specialty(models.Model):
     name=models.CharField(max_length=50,blank=False)
-    doctors=models.ManyToManyField(Doctor,related_name="specialties")
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
+    class Meta():
+        verbose_name="Specialty"
+        verbose_name_plural="Specialties"
+    def __str__(self):
+        return f"{self.name}"
